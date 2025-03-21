@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ReadyForDispatchAPI.ReadyForDispatch.Models;
+using ReadyForDispatchAPI.Services.ReadyForDispatch;
 
 namespace ReadyForDispatchAPI.ReadyForDispatch.Controllers;
 
@@ -7,22 +8,23 @@ namespace ReadyForDispatchAPI.ReadyForDispatch.Controllers;
 [Route("api/dispatch")]
 public class ReadyForDispatchController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private readonly IReadyForDispatchService _readForDispatchService;
 
     private readonly ILogger<ReadyForDispatchController> _logger;
 
-    public ReadyForDispatchController(ILogger<ReadyForDispatchController> logger)
+    public ReadyForDispatchController(ILogger<ReadyForDispatchController> logger, IReadyForDispatchService readyForDispatchService)
     {
         _logger = logger;
+        _readForDispatchService = readyForDispatchService;
     }
 
     [HttpPost("ReadyForDispatch")]
     public IActionResult ReadyForDispatch([FromBody] DispatchRequest dispatchRequest)
     {
         _logger.LogInformation("Request Received: " + dispatchRequest);
+        _readForDispatchService.ProcessDispatchRequest(dispatchRequest);
+        _logger.LogInformation("Request Finished: " + dispatchRequest);
+        
         return Ok();
     }
 }

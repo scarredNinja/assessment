@@ -25,7 +25,7 @@ namespace assessment.ReadyForDispatchApp
             FunctionContext context)
         {
             var logger = context.GetLogger("ReadyForDispatch");
-            logger.LogInformation("Azure Function triggered.");
+            logger.LogInformation("ReadyForDispatch App Triggers");
 
             // Read input
             var requestBody = await req.ReadAsStringAsync();

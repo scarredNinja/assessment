@@ -22,12 +22,16 @@ namespace ReadyForDispatchAPI.Services.ReadyForDispatch
                 // Validation - this could return a boolean to indicate if validation passed or throws an exception and we handle the exception in a try catch
                 _dispatchValidation.ValidateRequest(dispatchRequest);
 
-                //Process Request
+                // Process Request - Persist to the database (this will be in its own class/service)
+
+                // Send request to the Send to 3PL App with the Sales Order Number as Reference (may look at waiting for a return message which can then used to complete the API Request)
             }
             catch(Exception ex)
             {
                 _logger.LogError("Exception Thrown: " + ex.Message);
             }
+
+            _logger.LogInformation("Finished Processing Dispatch Request: " + dispatchRequest.ToString());
         }
     }
 }
