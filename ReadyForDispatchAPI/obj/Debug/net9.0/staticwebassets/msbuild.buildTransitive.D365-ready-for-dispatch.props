@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\D365-ready-for-dispatch.props" />
+</Project>

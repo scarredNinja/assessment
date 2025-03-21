@@ -1,0 +1,45 @@
+# .azure-pipelines.yml
+
+trigger:
+  branches:
+    include:
+      - main  # This will trigger the pipeline on changes to the 'main' branch
+
+pool:
+  vmImage: 'windows-latest'  # Use a Microsoft-hosted Windows agent
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Install .NET SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'  # Install .NET 8.x SDK
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - task: Restore@2
+    displayName: 'Restore dependencies'
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'  # Restore dependencies for all .csproj files
+
+  - task: Build@1
+    displayName: 'Build the project'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'  # Build all projects
+
+  - task: Publish@1
+    displayName: 'Publish the application'
+    inputs:
+      command: 'publish'
+      projects: '**/*.csproj'  # Publish all projects
+      publishWebProjects: false
+      zipAfterPublish: true
+      platform: 'any'
+      configuration: 'Release'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Build Artifacts'
+    inputs:
+      artifactName: 'drop'
+      publishLocation: 'Container'
